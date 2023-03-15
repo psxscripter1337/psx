@@ -1,0 +1,30 @@
+local lib = require(game:GetService("ReplicatedStorage").Framework.Library)
+function BypassAntiCheat()
+	local Network = require(game:GetService("ReplicatedStorage").Library.Client.Network)
+	local functions = Network.Fire, Network.Invoke
+	local old 
+	old = hookfunction(getupvalue(functions, 1) , function(...) return true end)
+	local Blunder = require(game:GetService("ReplicatedStorage"):FindFirstChild("BlunderList", true))
+	local OldGet = Blunder.getAndClear
+	setreadonly(Blunder, false)
+	local function OutputData(Message)
+		print(Message .. "\n")
+	end
+	Blunder.getAndClear = function(...)
+		local Packet = ...
+
+		for i,v in next, Packet.list do
+			if v.message ~= "PING" then
+				OutputData(v.message)
+				table.remove(Packet.list, i)
+			end
+		end
+		return OldGet(Packet)
+	end
+	for i, v in pairs(getconstants(lib.WorldCmds.Load)) do
+		if v == "Sound" then
+			setconstant(lib.WorldCmds.Load, i, "DAWFAWFAWFAWFAWFAWFAWFAWFAWFAWF")
+		end
+	end
+end
+BypassAntiCheat()
