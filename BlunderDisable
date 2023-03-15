@@ -1,3 +1,5 @@
+local lib = require(game:GetService("ReplicatedStorage").Framework.Library)
+
 
 function BypassAntiCheat()
 	local Network = require(game:GetService("ReplicatedStorage").Library.Client.Network)
